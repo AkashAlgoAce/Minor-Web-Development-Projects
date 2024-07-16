@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Game</title>
+    <style>
+      body {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Stone, Paper and Seissor</h1>
+    <!-- Code For Stone  -->
+    <button
+      onclick="
+    let computerChoose = computerChoiseIs();
+    let result = getResult('Stone',computerChoose);
+    alertmsg('Stone',computerChoose,result);
+    "
+    >
+      Stone
+    </button>
+    <!-- Code For Paper  -->
+    <button
+      onclick="
+    computerChoose = computerChoiseIs();
+    result = getResult('Paper',computerChoose);
+    alertmsg('Paper',computerChoose,result);   "
+    >
+      Paper
+    </button>
+
+    <!-- Code For Sessior -->
+    <button
+      onclick="
+    computerChoose = computerChoiseIs();
+    result = getResult('Seissor',computerChoose);
+    alertmsg('Seissor',computerChoose,result);    "
+    >
+      Seissor
+    </button>
+
+    <button onclick="
+    localStorage.clear();
+    resetScore();
+    ">Reset</button>
+
+    <h3 id="user-move"></h3>
+    <h3 id="computer-move"></h3>
+    <h4 id="result"></h4>
+    <h4 id="score"></h4>
+
+    <!-- JAVA SCRIPT -->
+    <script>
+
+// Maintain result
+let scoreStr = localStorage.getItem('score');
+let score;
+resetScore(scoreStr);
+function resetScore(scoreStr){
+  score = scoreStr ? JSON.parse(scoreStr) : {
+  Win : 0,
+  Loss : 0,
+  Tie : 0,
+}};
+
+
+      // Function for getting the result
+      function getResult(userMove, computerMove) {
+        if (userMove === "Stone") {
+          if (computerMove === "Seissor") {
+            score.Win++;
+            return "You Won.";
+          } else if (computerMove === "Stone") {
+            score.Tie++;
+            return `It's a tie.`;
+          } else {
+            score.Loss++;
+            return "Computer Won.";
+          }
+        } else if (userMove === "Paper") {
+          if (computerMove === "Seissor") {
+            score.Loss++;
+            return "Computer Won.";
+          } else if (computerMove === "Stone") {
+            score.Win++;
+            return `You Won`;
+          } else {
+            score.Tie++;
+            return `It's a tie`;
+          }
+        } else {
+          if (computerMove === "Seissor") {
+            score.Tie++;
+            return `It's a tie.`;
+          } else if (computerMove === "Stone") {
+            score.Loss++;
+            return "Computer Won";
+          } else {
+            score.Win++;
+            return "You Won";
+          }
+        }
+      }
+      // Function for getting the Computer Choice
+      function computerChoiseIs() {
+        let random = Math.random() * 3;
+        if (random > 0 && random <= 1) {
+          return "Stone";
+        } else if (random > 1 && random <= 2) {
+          return "Paper";
+        } else {
+          return "Seissor";
+        }
+      }
+
+      // Function for showing alert message;
+      function alertmsg(userChoice, computerChoose, result) {
+        localStorage.setItem('score',JSON.stringify(score));
+        document.querySelector('#user-move').innerText = `You have choosen ${userChoice}`;
+        document.querySelector('#computer-move').innerText = `Computer choice is ${computerChoose}`;
+        document.querySelector('#result').innerText = result;
+        document.querySelector('#score').innerText = ` 
+        Score :
+            Win : ${score.Win}
+            Loss : ${score.Loss}
+            Tie : ${score.Tie}`;
+      }
+    </script>
+  </body>
+</html>
